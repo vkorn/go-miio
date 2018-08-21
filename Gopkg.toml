@@ -1,0 +1,11 @@
+[[constraint]]
+  branch = "master"
+  name = "github.com/grandcat/zeroconf"
+
+[[constraint]]
+  name = "github.com/sirupsen/logrus"
+  version = "1.0.6"
+
+[prune]
+  go-tests = true
+  unused-packages = true
