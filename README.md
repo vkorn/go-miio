@@ -14,7 +14,7 @@ Standalone devices are using protocol implementation by [nickw444](https://githu
 
 * Temperature/humidity sensors
 * Switches
-* Motion sensor
+* Motion sensors
 * Magnets
 * Gateway LED
 

@@ -1,5 +1,5 @@
 //go:generate enumer -type=gatewayDeviceModel -transform=snake -trimprefix=dev
-//go:generate enumer -type=fldName -transform=snake -trimprefix=Field
+//go:generate enumer -type=fldName -transform=snake -trimprefix=field
 //go:generate enumer -type=internalClick -transform=snake -trimprefix=cl
 
 package miio

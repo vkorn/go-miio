@@ -284,9 +284,6 @@ func (d *XiaomiDevice) sendAndWait(p *packet.Packet, cmd string, storeResponse b
 
 			// Trailing \x00
 			dec = dec[:len(dec)-1]
-
-			println(string(dec))
-
 			c := &devResponse{}
 			err = json.Unmarshal(dec, c)
 			if err != nil {

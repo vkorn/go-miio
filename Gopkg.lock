@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  branch = "master"
+  name = "github.com/benbjohnson/clock"
+  packages = ["."]
+  revision = "7dc76406b6d3c05b5f71a86293cbcf3c4ea03b19"
+
+[[projects]]
   name = "github.com/cenkalti/backoff"
   packages = ["."]
   revision = "2ea60e5f094469f9e65adb9cd103795b73ae743e"
@@ -14,10 +20,22 @@
   revision = "df75bb3ccae13e625e5b60e68d9c9590056dded1"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/lunixbochs/struc"
+  packages = ["."]
+  revision = "02e4c2afbb2ac4bae6876f52c8273fc4cf5a4b0a"
+
+[[projects]]
   name = "github.com/miekg/dns"
   packages = ["."]
   revision = "5a2b9fab83ff0f8bfc99684bd5f43a37abe560f1"
   version = "v1.0.8"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/nickw444/miio-go"
+  packages = ["protocol/packet"]
+  revision = "52b65c4114f1c814e1d3e2a4ded65795311e8a1c"
 
 [[projects]]
   name = "github.com/sirupsen/logrus"
@@ -60,6 +78,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "484424973533077cf263607f9eaf21950c2971ae99d04020da1822cc7b0dc2fa"
+  inputs-digest = "85a51a5d4cd5096917de22fe8bbeecd652daac79a9945c11e7b81655f503dfc8"
   solver-name = "gps-cdcl"
   solver-version = 1

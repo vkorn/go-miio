@@ -31,6 +31,7 @@ func main() {
 	}()
 
 	time.Sleep(1 * time.Second)
+	g.SetBrightness(59)
 	g.SetColor(color.RGBA{R: 128, G: 100, B: 24, A: 0})
 
 	time.Sleep(10 * time.Second)

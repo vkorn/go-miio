@@ -4,7 +4,6 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"image/color"
 	"net"
@@ -53,7 +52,7 @@ type Gateway struct {
 func NewGateway(deviceIP, aesKey string) (*Gateway, error) {
 	g := &Gateway{
 		UpdateChan: make(chan *DeviceUpdateMessage, 50),
-		State:      &GatewayState{RGB: color.RGBA{R: 0, G: 0, B: 0, A:0}},
+		State:      &GatewayState{RGB: color.RGBA{R: 0, G: 0, B: 0, A: 0}},
 		Sensors:    make(map[string]*SensorHT),
 		Magnets:    make(map[string]*Magnet),
 		Motions:    make(map[string]*Motion),
@@ -98,10 +97,10 @@ func (g *Gateway) SetColor(c color.Color) error {
 	_, _, _, a := g.State.RGB.RGBA()
 
 	corrected := color.RGBA{
-		R: uint8(r),
-		G: uint8(gC),
-		B: uint8(b),
-		A: uint8(a),
+		R: uint8(r/256),
+		G: uint8(gC/256),
+		B: uint8(b/256),
+		A: uint8(a/256),
 	}
 
 	data := map[string]interface{}{
@@ -121,13 +120,25 @@ func (g *Gateway) SetBrightness(br uint8) error {
 	}
 
 	r, gC, b, _ := g.State.RGB.RGBA()
-	return g.SetColor(color.RGBA{R: uint8(r), G: uint8(gC), B: uint8(b), A: br})
+
+	corrected := color.RGBA{
+		R: uint8(r/256),
+		G: uint8(gC/256),
+		B: uint8(b/256),
+		A: 100 -br,
+	}
+
+	data := map[string]interface{}{
+		fieldRGB.String(): uint32FromColor(corrected),
+	}
+
+	return g.stateCommand(data)
 }
 
 // On turns the gateway on.
 func (g *Gateway) On() error {
 	if !g.State.On {
-		return g.SetColor(color.RGBA{255, 255, 255, 0})
+		return g.SetColor(color.RGBA{R: 255, G: 255, B: 255, A: 0})
 	}
 
 	return nil
@@ -136,7 +147,7 @@ func (g *Gateway) On() error {
 // Off turns the gateway off.
 func (g *Gateway) Off() error {
 	if g.State.On {
-		return g.SetColor(color.RGBA{0, 0, 0, 0})
+		return g.SetColor(color.RGBA{R: 0, G: 0, B: 0, A: 0})
 	}
 
 	return nil
@@ -159,6 +170,8 @@ func (g *Gateway) UpdateState() {
 		g.State.On = true
 		g.State.RGB = rgbFromUint32(g.State.internalRGB)
 		_, _, _, a := g.State.RGB.RGBA()
+		a = a / 256
+
 		if a > 100 {
 			a = 100
 		}
@@ -336,10 +349,6 @@ func (g *Gateway) command(cmd string, data map[string]interface{}) error {
 
 // Performs a device command with specific SID.
 func (g *Gateway) commandWithSid(cmd string, data map[string]interface{}, sid string) error {
-	if "" != sid && "" == g.token {
-		return errors.New("empty token")
-	}
-
 	block, err := aes.NewCipher(g.aesKey)
 	if err != nil {
 		LOGGER.Error("Failed to create CMD cipher: %s", err.Error())
