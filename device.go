@@ -176,7 +176,7 @@ func (d *XiaomiDevice) GetFieldValueBool(field fldName, curVal bool) bool {
 }
 
 // Sends the command to a device. Will try to retry.
-func (d *XiaomiDevice) sendCommand(cmd string, data map[string]interface{}, storeResponse bool, retries int) bool {
+func (d *XiaomiDevice) sendCommand(cmd string, data []interface{}, storeResponse bool, retries int) bool {
 	resp := false
 	for ii := 0; ii < retries; ii++ {
 		resp = d.doCommand(cmd, data, storeResponse)
@@ -189,7 +189,7 @@ func (d *XiaomiDevice) sendCommand(cmd string, data map[string]interface{}, stor
 }
 
 // Performs single command execution.
-func (d *XiaomiDevice) doCommand(cmd string, data map[string]interface{}, storeResponse bool) bool {
+func (d *XiaomiDevice) doCommand(cmd string, data []interface{}, storeResponse bool) bool {
 	if d.lastDiscovery.Add(1 * time.Minute).Before(time.Now()) {
 		if false == d.discovery() {
 			return false
@@ -294,6 +294,7 @@ func (d *XiaomiDevice) sendAndWait(p *packet.Packet, cmd string, storeResponse b
 			if storeResponse {
 				d.Lock()
 				d.rawState[cmd] = dec
+				d.messages <- cmd
 				d.Unlock()
 			}
 

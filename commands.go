@@ -16,9 +16,9 @@ type command struct {
 
 // Independent device command.
 type deviceCommand struct {
-	ID     int64                  `json:"id"`
-	Method string                 `json:"method"`
-	Params map[string]interface{} `json:"params,omitempty"`
+	ID     int64         `json:"id"`
+	Method string        `json:"method"`
+	Params []interface{} `json:"params,omitempty"`
 }
 
 // Base response from the device.

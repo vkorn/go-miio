@@ -18,6 +18,7 @@ const (
 	cmdPause     = "app_pause"
 	cmdDock      = "app_charge"
 	cmdFindMe    = "find_me"
+	cmdFanPower  = "set_custom_mode"
 )
 
 // Gateway device model.

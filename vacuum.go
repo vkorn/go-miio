@@ -257,6 +257,18 @@ func (v *Vacuum) FindMe() bool {
 	return v.sendCommand(cmdFindMe, nil, false, vacRetries)
 }
 
+// SetFanSpeed sets fan speed
+func (v *Vacuum) SetFanPower(val uint8) bool {
+	if val > 100 {
+		val = 100
+	}
+	if !v.sendCommand(cmdFanPower, []interface{}{val}, false, vacRetries) {
+		return false
+	}
+
+	return v.UpdateStatus()
+}
+
 // Processes internal updates.
 // We care only about state update messages.
 func (v *Vacuum) processUpdates() {
