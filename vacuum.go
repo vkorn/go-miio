@@ -252,6 +252,8 @@ func (v *Vacuum) StopCleaningAndDock() bool {
 	if !v.sendCommand(cmdDock, nil, false, vacRetries) {
 		return false
 	}
+
+	time.Sleep(1 * time.Second)
 	return v.UpdateStatus()
 }
 
@@ -261,6 +263,7 @@ func (v *Vacuum) FindMe() bool {
 		return false
 	}
 
+	time.Sleep(1 * time.Second)
 	return v.UpdateStatus()
 }
 
