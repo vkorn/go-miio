@@ -184,6 +184,9 @@ func (v *Vacuum) UpdateState() {
 	case 8:
 		v.State.State = VacStateCharging
 	case 9:
+		v.State.State = VacStateUnknown
+		v.State.Error = VacErrorCharge
+	case 10:
 		v.State.State = VacStatePaused
 	case 11:
 		v.State.State = VacStateSpot
@@ -254,7 +257,11 @@ func (v *Vacuum) StopCleaningAndDock() bool {
 
 // FindMe sends the find me command.
 func (v *Vacuum) FindMe() bool {
-	return v.sendCommand(cmdFindMe, nil, false, vacRetries)
+	if !v.sendCommand(cmdFindMe, nil, false, vacRetries) {
+		return false
+	}
+
+	return v.UpdateStatus()
 }
 
 // SetFanSpeed sets fan speed
