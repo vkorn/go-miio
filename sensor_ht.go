@@ -30,7 +30,7 @@ func (s *SensorHT) GetUpdateMessage() *DeviceUpdateMessage {
 
 // UpdateState performs a device update.
 func (s *SensorHT) UpdateState() {
-	s.State.Temperature = s.GetFieldPercentage(fieldName, s.State.Temperature)
+	s.State.Temperature = s.GetFieldPercentage(fieldTemperature, s.State.Temperature)
 	s.State.Humidity = s.GetFieldPercentage(fieldHumidity, s.State.Humidity)
 	s.State.Battery = s.GetBatteryLevel(s.State.Battery)
 }

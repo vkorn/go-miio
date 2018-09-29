@@ -6,9 +6,9 @@ import (
 	"fmt"
 )
 
-const _fldNameName = "rgbnamehumidityvoltagestatusno_motion"
+const _fldNameName = "rgbtemperaturehumidityvoltagestatusno_motion"
 
-var _fldNameIndex = [...]uint8{0, 3, 7, 15, 22, 28, 37}
+var _fldNameIndex = [...]uint8{0, 3, 14, 22, 29, 35, 44}
 
 func (i fldName) String() string {
 	if i < 0 || i >= fldName(len(_fldNameIndex)-1) {
@@ -21,11 +21,11 @@ var _fldNameValues = []fldName{0, 1, 2, 3, 4, 5}
 
 var _fldNameNameToValueMap = map[string]fldName{
 	_fldNameName[0:3]:   0,
-	_fldNameName[3:7]:   1,
-	_fldNameName[7:15]:  2,
-	_fldNameName[15:22]: 3,
-	_fldNameName[22:28]: 4,
-	_fldNameName[28:37]: 5,
+	_fldNameName[3:14]:  1,
+	_fldNameName[14:22]: 2,
+	_fldNameName[22:29]: 3,
+	_fldNameName[29:35]: 4,
+	_fldNameName[35:44]: 5,
 }
 
 // fldNameString retrieves an enum value from the enum constants string name.

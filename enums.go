@@ -37,7 +37,7 @@ type fldName int
 
 const (
 	fieldRGB fldName = iota
-	fieldName
+	fieldTemperature
 	fieldHumidity
 	fieldVoltage
 	fieldStatus
