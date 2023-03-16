@@ -1,6 +1,7 @@
 package miio
 
 import (
+	"bytes"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
@@ -282,8 +283,7 @@ func (d *XiaomiDevice) sendAndWait(p *packet.Packet, cmd string, storeResponse b
 				continue
 			}
 
-			// Trailing \x00
-			dec = dec[:len(dec)-1]
+			dec = bytes.TrimRight(dec, "\x00")
 			c := &devResponse{}
 			err = json.Unmarshal(dec, c)
 			if err != nil {
