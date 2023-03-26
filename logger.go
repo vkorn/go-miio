@@ -1,10 +1,39 @@
 package miio
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/sirupsen/logrus"
 )
+
+type LogLevel int
+
+const (
+	LogLevelFatal LogLevel = iota
+	LogLevelError
+	LogLevelWarn
+	LogLevelInfo
+	LogLevelDebug
+)
+
+func parseLogLevel(lvl LogLevel) (logrus.Level, error) {
+	switch lvl {
+	case LogLevelDebug:
+		return logrus.DebugLevel, nil
+	case LogLevelInfo:
+		return logrus.InfoLevel, nil
+	case LogLevelWarn:
+		return logrus.WarnLevel, nil
+	case LogLevelError:
+		return logrus.ErrorLevel, nil
+	case LogLevelFatal:
+		return logrus.FatalLevel, nil
+	}
+
+	var l logrus.Level
+	return l, fmt.Errorf("miio: invalid LogLevel '%d'", lvl)
+}
 
 var (
 	// LOGGER implementation.
@@ -13,6 +42,7 @@ var (
 
 // ILogger defines a logger interface.
 type ILogger interface {
+	SetLogLevel(lvl LogLevel) error
 	Debug(format string, v ...interface{})
 	Info(format string, v ...interface{})
 	Warn(format string, v ...interface{})
@@ -27,8 +57,21 @@ type defaultLogger struct {
 // Creates a new default logger.
 func newLogger() ILogger {
 	logrus.SetOutput(os.Stdout)
-	logrus.SetLevel(logrus.DebugLevel)
-	return &defaultLogger{}
+
+	l := &defaultLogger{}
+	l.SetLogLevel(LogLevelDebug)
+	return l
+}
+
+func (*defaultLogger) SetLogLevel(lvl LogLevel) error {
+	l, err := parseLogLevel(lvl)
+	if err != nil {
+		return err
+	}
+
+	logrus.SetLevel(l)
+
+	return nil
 }
 
 // Debug prints debug lvl message.
