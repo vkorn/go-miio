@@ -17,8 +17,8 @@ const (
 	LogLevelDebug
 )
 
-func parseLogLevel(lvl LogLevel) (logrus.Level, error) {
-	switch lvl {
+func (l LogLevel) logrus() (logrus.Level, error) {
+	switch l {
 	case LogLevelDebug:
 		return logrus.DebugLevel, nil
 	case LogLevelInfo:
@@ -31,8 +31,8 @@ func parseLogLevel(lvl LogLevel) (logrus.Level, error) {
 		return logrus.FatalLevel, nil
 	}
 
-	var l logrus.Level
-	return l, fmt.Errorf("miio: invalid LogLevel '%d'", lvl)
+	var level logrus.Level
+	return level, fmt.Errorf("miio: invalid LogLevel: %d", l)
 }
 
 var (
@@ -42,7 +42,7 @@ var (
 
 // ILogger defines a logger interface.
 type ILogger interface {
-	SetLogLevel(lvl LogLevel) error
+	SetLevel(level LogLevel) error
 	Debug(format string, v ...interface{})
 	Info(format string, v ...interface{})
 	Warn(format string, v ...interface{})
@@ -59,17 +59,17 @@ func newLogger() ILogger {
 	logrus.SetOutput(os.Stdout)
 
 	l := &defaultLogger{}
-	l.SetLogLevel(LogLevelDebug)
+	l.SetLevel(LogLevelDebug)
 	return l
 }
 
-func (*defaultLogger) SetLogLevel(lvl LogLevel) error {
-	l, err := parseLogLevel(lvl)
+func (*defaultLogger) SetLevel(l LogLevel) error {
+	logrusLevel, err := l.logrus()
 	if err != nil {
 		return err
 	}
 
-	logrus.SetLevel(l)
+	logrus.SetLevel(logrusLevel)
 
 	return nil
 }
